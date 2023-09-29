@@ -41,6 +41,7 @@ func main() {
 		fmt.Printf("-------- day %d --------\n", day)
 		fmt.Println("Name, SellIn, Quality")
 		for _, item := range newGildedRoseItems {
+			fmt.Printf("%s\n", item)
 			item.UpdateQuality()
 		}
 	}

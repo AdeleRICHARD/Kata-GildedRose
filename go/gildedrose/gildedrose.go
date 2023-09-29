@@ -31,7 +31,7 @@ We have recently signed a supplier of conjured items. This requires an update to
 	"Conjured" items degrade in Quality twice as fast as normal items
 */
 
-type GildedRose interface {
+type GildedRoseItem interface {
 	UpdateQuality()
 }
 
@@ -55,8 +55,8 @@ type Conjured struct {
 	item *model.Item
 }
 
-func NewItems(gildedRoseItems []*model.Item) []GildedRose {
-	items := make([]GildedRose, 0, len(gildedRoseItems))
+func NewItems(gildedRoseItems []*model.Item) []GildedRoseItem {
+	items := make([]GildedRoseItem, 0, len(gildedRoseItems))
 	for _, item := range gildedRoseItems {
 		switch item.Name {
 		case "Aged Brie":
@@ -75,7 +75,12 @@ func NewItems(gildedRoseItems []*model.Item) []GildedRose {
 }
 
 func (gi *GenerallItem) UpdateQuality() {
-	// Will update the quality of the item
+	/* 	All items have a SellIn value which denotes the number of days we have to sell the item
+	   	All items have a Quality value which denotes how valuable the item is
+	   	At the end of each day our system lowers both values for every item
+	*/
+	gi.item.SellIn--
+	gi.item.Quality--
 }
 
 func (ab *AgedBrie) UpdateQuality() {
