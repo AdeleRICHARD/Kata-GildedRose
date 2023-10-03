@@ -20,13 +20,12 @@ func main() {
 		{Name: "Backstage passes to a TAFKAL80ETC concert", SellIn: 15, Quality: 20},
 		{Name: "Backstage passes to a TAFKAL80ETC concert", SellIn: 10, Quality: 49},
 		{Name: "Backstage passes to a TAFKAL80ETC concert", SellIn: 5, Quality: 49},
-		// this conjured item does not work properly yet
 		{Name: "Conjured Mana Cake", SellIn: 3, Quality: 6},
 	}
 
 	newGildedRoseItems := gildedrose.NewItems(items)
 
-	days := 2
+	days := 10
 	var err error
 	if len(os.Args) > 1 {
 		days, err = strconv.Atoi(os.Args[1])

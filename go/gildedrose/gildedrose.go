@@ -79,24 +79,85 @@ func (gi *GenerallItem) UpdateQuality() {
 	   	All items have a Quality value which denotes how valuable the item is
 	   	At the end of each day our system lowers both values for every item
 	*/
-	gi.item.SellIn--
-	gi.item.Quality--
+	gi.item.Quality = degradeQualityTwice(gi.item)
+	gi.item.SellIn = degradeSellIn(gi.item)
+	gi.item.Quality = degradeQuality(gi.item)
+
 }
 
 func (ab *AgedBrie) UpdateQuality() {
 	// Will update the quality of the item
+	ab.item.SellIn = degradeSellIn(ab.item)
+	ab.item.Quality = increaseQuality(ab.item)
 }
 
 func (s *Sulfuras) UpdateQuality() {
-	// Will update the quality of the item
+	// Sulfras never has to be sold or decreases in quality
 }
 
 func (bp *BackstagePasses) UpdateQuality() {
 	// Will update the quality of the item
+	bp.item.SellIn = degradeSellIn(bp.item)
+	bp.item.Quality = increaseQuality(bp.item)
+	if bp.item.SellIn < 11 {
+		bp.item.Quality = increaseQuality(bp.item)
+	} else if bp.item.SellIn < 6 {
+		bp.item.Quality = increaseQuality(bp.item)
+	} else if bp.item.SellIn <= 0 {
+		bp.item.Quality = 0
+	}
 }
 
 func (c *Conjured) UpdateQuality() {
 	// Will update the quality of the item
+	c.item.SellIn = degradeSellIn(c.item)
+	c.item.Quality = degradeQualityTwice(c.item)
+}
+
+func degradeQuality(item *model.Item) int {
+	if isDegradable(item) {
+		return item.Quality - 1
+	}
+	return 0
+}
+
+func degradeQualityTwice(item *model.Item) int {
+	if isDegradableTwice(item) {
+		return item.Quality - 2
+	}
+	return 0
+}
+
+func degradeSellIn(item *model.Item) int {
+	if item.SellIn > 0 {
+		return item.SellIn - 1
+	}
+	return 0
+}
+
+func isDegradable(item *model.Item) bool {
+	if item.Name == "Sulfuras, Hand of Ragnaros" {
+		return false
+	}
+
+	if item.SellIn <= 0 && item.Quality >= 2 {
+		return true
+	}
+	return false
+}
+
+func isDegradableTwice(item *model.Item) bool {
+	if item.Quality >= 1 && item.SellIn > 0 {
+		return true
+	}
+	return false
+}
+
+func increaseQuality(item *model.Item) int {
+	if item.Quality < 50 {
+		return item.Quality + 1
+	}
+	return 50
 }
 
 /* func UpdateQuality(items []*model.Item) {
