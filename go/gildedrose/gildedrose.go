@@ -154,6 +154,10 @@ func isDegradableTwice(item *model.Item) bool {
 }
 
 func increaseQuality(item *model.Item) int {
+	if item.Name == "Backstage passes to a TAFKAL80ETC concert" && item.Quality <= 48 {
+		return item.Quality + 2
+	}
+
 	if item.Quality < 50 {
 		return item.Quality + 1
 	}
